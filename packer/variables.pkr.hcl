@@ -23,7 +23,3 @@ variable "azure_region" {
   default = "westus3"
 }
 
-variable "aws_region" {
-  type = string
-  default = "us-west-1"
-}

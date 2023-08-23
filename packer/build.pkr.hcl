@@ -1,9 +1,5 @@
 packer {
   required_plugins {
-    amazon = {
-      source  = "github.com/hashicorp/amazon"
-      version = ">= 1.1.5"
-    }
     azure = {
       source  = "github.com/hashicorp/azure"
       version = ">= 1.3.1"
@@ -13,25 +9,6 @@ packer {
 
 locals {
   date = formatdate("HHmm", timestamp())
-}
-
-source "amazon-ebs" "ubuntu-lts" {
-  source_ami_filter {
-    filters = {
-      virtualization-type = "hvm"
-      name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
-      root-device-type    = "ebs"
-    }
-    owners      = ["099720109477"]
-    most_recent = true
-  }
-  region = var.aws_region
-
-  ami_name       = "hashicups_{{timestamp}}"
-  ami_regions    = [var.aws_region]
-  instance_type  = "t2.small"
-  ssh_username   = "ubuntu"
-  ssh_agent_auth = false
 }
 
 source "azure-arm" "ubuntu-lts" {
@@ -57,9 +34,6 @@ source "azure-arm" "ubuntu-lts" {
 }
 
 build {
-  source "source.amazon-ebs.ubuntu-lts" {
-    name = "hashicups"
-  }
 
   source "source.azure-arm.ubuntu-lts" {
     name               = "hashicups"
